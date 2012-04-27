@@ -5,10 +5,10 @@ import com.gmail.yuyang226.flickr.photos.Photo;
 
 public class FlickrPictureInfo extends PictureInfo {
 
-public String id; 
-public String server; 
-public String farm; 
-public String secret; 
+private String id; 
+private String server; 
+private String farm; 
+private String secret; 
 	
 	public FlickrPictureInfo()
 	{
@@ -22,6 +22,8 @@ public String secret;
 		server =_server; 
 		farm = _farm; 
 		secret = _secret; 
+		
+		hash = toHash(); 
 	}
 	
 	
@@ -32,7 +34,16 @@ public String secret;
 		id = p.getId();
 		server = p.getServer(); 
 		farm = p.getFarm(); 
-		secret = p.getSecret(); 
+		secret = p.getSecret();
+		
+		hash = toHash(); 
+	}
+	
+	
+	public String toString()
+	{
+		return "flickr:" + id + ":" + server + ":" + farm + ":" + secret; 
+		
 	}
 	
 	

@@ -31,7 +31,7 @@ public class Server {
 		{
 	
 			RecommendationTask task = new RecommendationTask( redis.blpop(0, "users:recommend:queue")); 
-			System.out.print("recommending " + task.pageCount + " pics for '" + task.username + "' ... "); 
+			System.out.print("recommendingg " + task.pageCount + " pics for '" + task.username + "' ... "); 
 			long start = System.currentTimeMillis();
 			ArrayList<RecommendationPage> recs = learner.recommend(task); 
 			
@@ -40,6 +40,7 @@ public class Server {
 				long page = redis.incr("counter:user:" + task.username + ":page" ); 
 				RecommendationPage rec = recs.get(i); 
 				rec.pageid = page; 
+				
 				
 				//add info to various structures in redis: 
 				Pipeline p = redis.pipelined(); 
@@ -50,14 +51,14 @@ public class Server {
 				String pageKey        = "user:" + task.username + ":page:" + rec.pageid + ":pics"; 
 				for(int j=0; j< rec.pics.size(); j++)
 				{
-					String hash = rec.pics.get(j).picture.toHash();
+					String hash = rec.pics.get(j).picture.hash; 
 					p.sadd(userVisitedKey, hash);						//user visited this photo
 					
 					String picVisitedKey  = "pic:" +  hash + ":visited"; 
 					p.sadd(picVisitedKey, task.username); 				//picture was visited by this user
 					
-					p.rpush(pageKey, hash); 							//page contains this picture
-					p.set("pic:" + hash, rec.pics.get(j).picture.toJson()); 
+					p.rpush(pageKey, hash); 								//page contains this picture
+					p.set("pic:" + hash, rec.pics.get(j).picture.toJson()); //remember to call toHash before calling toJson (bad design really)
 				}
 				
 				p.sync(); 				//wait for commands to execute

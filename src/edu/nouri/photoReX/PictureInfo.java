@@ -10,6 +10,9 @@ public abstract class PictureInfo {
 
 	public static MessageDigest sha1; 
 	public String website;
+	public String hash; 
+	public boolean isViewed = false; 
+	public boolean isVisited = false; 
 	
 	PictureInfo(String w)
 	{
@@ -28,6 +31,11 @@ public abstract class PictureInfo {
 		website = w; 
 	}
 	
+	//each subclass should implement their own
+	public String toString()
+	{
+		return website + ":incomplete"; 
+	}
 	
 	public String toHash()
 	{
@@ -43,10 +51,11 @@ public abstract class PictureInfo {
 			return result.toString(); 
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-			return ""; 
+			return "";  
 		} 
 	}
 
+	//remember to call toHash before calling this so that the hash field is generated 
 	public String toJson()
 	{
 		Gson gson = new Gson(); 
