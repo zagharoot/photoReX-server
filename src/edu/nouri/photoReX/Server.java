@@ -28,6 +28,7 @@ public class Server {
 		
 		System.out.println("Learning server started..."); 
 				
+		long sleepTime = 1000; 		//how many miliseconds to wait before reconnecting to redis server
 		while(true)
 		{
 	
@@ -67,6 +68,8 @@ public class Server {
 				}
 				long end = System.currentTimeMillis(); 
 				System.out.println("done in " + (end-start)/1000.0 + "seconds."); 
+				
+				sleepTime = 1000; //reset sleepTime because we were successful
 				//send pic to redis both as complete json to be passed to client and detailed structured for analysis 
 			}
 			catch(JedisConnectionException jce)
@@ -75,6 +78,7 @@ public class Server {
 				{
 					redis.disconnect(); 
 					System.out.println("redis was closed. trying to reconnect..."); 
+					Thread.sleep(sleepTime*=2);
 				}
 				catch(Exception e)
 				{
