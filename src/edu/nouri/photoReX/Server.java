@@ -81,8 +81,10 @@ public class Server {
 					DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 					Date date = new Date();
 					redis.disconnect(); 
-					System.out.println(dateFormat.format(date) + ": redis was closed. trying to reconnect in " + (sleepTime/500) + "seconds..."); 
-					Thread.sleep(sleepTime*=2);
+					System.out.println(dateFormat.format(date) + ": redis was closed. trying to reconnect in " + (int)(sleepTime/1000) + " seconds..."); 
+					Thread.sleep(sleepTime);
+					sleepTime = (long) Math.min(60000, sleepTime*1.5); 
+					redis.connect(); 
 				}
 				catch(Exception e)
 				{
