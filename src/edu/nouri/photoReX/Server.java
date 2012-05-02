@@ -1,5 +1,7 @@
 package edu.nouri.photoReX;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat; 
 import java.util.*; 
 import redis.clients.jedis.*; 
 import redis.clients.jedis.exceptions.*; 
@@ -76,8 +78,10 @@ public class Server {
 			{
 				try
 				{
+					DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+					Date date = new Date();
 					redis.disconnect(); 
-					System.out.println("redis was closed. trying to reconnect..."); 
+					System.out.println(dateFormat.format(date) + ": redis was closed. trying to reconnect in " + (sleepTime/500) + "seconds..."); 
 					Thread.sleep(sleepTime*=2);
 				}
 				catch(Exception e)
