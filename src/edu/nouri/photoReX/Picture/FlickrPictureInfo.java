@@ -1,6 +1,7 @@
-package edu.nouri.photoReX;
+package edu.nouri.photoReX.Picture;
 
 import com.gmail.yuyang226.flickr.photos.Photo;
+
 
 
 public class FlickrPictureInfo extends PictureInfo {

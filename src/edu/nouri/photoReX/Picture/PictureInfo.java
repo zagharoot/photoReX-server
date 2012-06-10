@@ -1,4 +1,4 @@
-package edu.nouri.photoReX;
+package edu.nouri.photoReX.Picture;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -6,9 +6,15 @@ import java.security.NoSuchAlgorithmException;
 
 import com.google.gson.Gson;
 
+/*
+ * This class represents a picture that the client will see. It only contains information that the client needs 
+ * to retrieve the actual picture from the corresponding website. 
+ */
+
 public abstract class PictureInfo {
 
 	public static MessageDigest sha1; 
+	
 	public String website;
 	public String hash; 
 	public boolean isViewed = false; 

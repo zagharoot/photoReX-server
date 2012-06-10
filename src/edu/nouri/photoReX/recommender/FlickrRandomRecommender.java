@@ -14,6 +14,7 @@ import com.gmail.yuyang226.flickr.photos.*;
 import com.gmail.yuyang226.flickr.interestingness.*;
 
 import edu.nouri.photoReX.*; 
+import edu.nouri.photoReX.Picture.FlickrPictureInfo;
 
 
 public class FlickrRandomRecommender extends Recommender {
@@ -22,17 +23,20 @@ public class FlickrRandomRecommender extends Recommender {
 	InterestingnessInterface interestingInterface; 
 	
 	
-	public FlickrRandomRecommender()
+	public FlickrRandomRecommender(RecommenderDelegate del)
 	{
+		super(del); 
 		flickr = new Flickr("945d26e355114ac74c1366d828aadb5e"); 
 		
 		this.interestingInterface = flickr.getInterestingnessInterface(); 
 	}
 	
 	
-	public ArrayList<RecommendationInfo> recommend(String username, int howMany)
+	public void execute(String username, int howMany, RecommendationTask task)
 	{
-		ArrayList<RecommendationInfo> result = new ArrayList<RecommendationInfo>(); 
+
+ 		ArrayList<RecommendationInfo> result = new ArrayList<RecommendationInfo>(); 
+ 
 		   try {
 //				PhotoList pl = 	this.interestingInterface.getList();
 				PhotoList pl = 	this.interestingInterface.getList((String) null, Extras.ALL_EXTRAS, howMany, 1);
@@ -52,32 +56,28 @@ public class FlickrRandomRecommender extends Recommender {
 					result.add(rinfo); 
 				}
 						
-				return result; 
+				delegate.recommendationDidComplete(this, task, result); 
 				
 			} catch (InvalidKeyException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				return null; 
+				delegate.recommendationDidComplete(this, task, null); 
 			} catch (NoSuchAlgorithmException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				return null; 
+				delegate.recommendationDidComplete(this, task, null); 
 			} catch (FlickrException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				return null; 
+				delegate.recommendationDidComplete(this, task, null); 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				return null; 
+				delegate.recommendationDidComplete(this, task, null); 
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				return null; 
+				delegate.recommendationDidComplete(this, task, null);
 			} 
-						
 	}
-	
-	
-	
 }

@@ -12,6 +12,10 @@ public class RecommendationPage {
 	public long pageid; 							//page number of this collection 
 	public ArrayList<RecommendationInfo> pics; 
 	
+	public RecommendationPage()
+	{
+		pics = new ArrayList<RecommendationInfo>(); 
+	}
 	
 	public String toJson()
 	{
