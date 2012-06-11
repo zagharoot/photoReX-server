@@ -128,10 +128,22 @@ public class Server implements LearnerDelegate {
 		return getNextRecommendationTask(1000); 
 	}
 	
+	
 	//blockingly retrieves the next task from redis 
 	public RecommendationTask getNextRecommendationTask(long sleepTime)
 	{
 		Jedis redis = redisPool.getResource(); 
+		RecommendationTask result =  getNextRecommendationTask(sleepTime, redis); 
+		redisPool.returnResource(redis); 
+		return result; 
+
+	}
+	
+	
+	
+	//blockingly retrieves the next task from redis 
+	public RecommendationTask getNextRecommendationTask(long sleepTime, Jedis redis)
+	{
 		try{
 			RecommendationTask task = new RecommendationTask( redis.blpop(0, "users:recommend:queue")); 
 			System.out.print("recommendingg " + task.pageCount + " pics for '" + task.username + "' ... "); 
@@ -148,16 +160,15 @@ public class Server implements LearnerDelegate {
 				Thread.sleep(sleepTime);
 				sleepTime = (long) Math.min(60000, sleepTime*1.5); 
 				redis.connect(); 
-				return getNextRecommendationTask(sleepTime); 
+				return getNextRecommendationTask(sleepTime, redis); 
 			}
 			catch(Exception e)
 			{
+				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+				Date date = new Date();
+				System.out.println(dateFormat.format(date) + ": giving up on redis. Error is: " + e.getStackTrace() ); 
 				return null; 
-				//wait some time 
-//				Thread.sleep(10000); 
 			}
-		}finally{
-			redisPool.returnResource(redis); 
 		}
 		
 	}
