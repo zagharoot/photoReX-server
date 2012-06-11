@@ -14,7 +14,7 @@ import com.gmail.yuyang226.flickr.photos.*;
 import com.gmail.yuyang226.flickr.interestingness.*;
 
 import edu.nouri.photoReX.*; 
-import edu.nouri.photoReX.Picture.FlickrPictureInfo;
+import edu.nouri.photoReX.picture.FlickrPictureInfo;
 
 
 public class FlickrRandomRecommender extends Recommender {

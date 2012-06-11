@@ -6,7 +6,7 @@ import us.monoid.json.JSONArray;
 import us.monoid.json.JSONObject;
 import us.monoid.web.JSONResource;
 import us.monoid.web.Resty;
-import edu.nouri.photoReX.Picture.*; 
+import edu.nouri.photoReX.picture.*;
 
 public class FiveHundredPXDataProvider {
 

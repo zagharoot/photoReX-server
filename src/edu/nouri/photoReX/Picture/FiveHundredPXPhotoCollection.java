@@ -1,4 +1,4 @@
-package edu.nouri.photoReX.Picture;
+package edu.nouri.photoReX.picture;
 
 import java.util.ArrayList;
 

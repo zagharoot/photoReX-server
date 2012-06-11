@@ -2,7 +2,7 @@ package edu.nouri.photoReX.recommender;
 
 import java.util.ArrayList;
 import edu.nouri.photoReX.dataProvider.*;
-import edu.nouri.photoReX.Picture.*;
+import edu.nouri.photoReX.picture.*;
 
 import edu.nouri.photoReX.RecommendationInfo;
 import edu.nouri.photoReX.RecommendationTask;

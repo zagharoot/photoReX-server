@@ -1,6 +1,6 @@
 package edu.nouri.photoReX;
 
-import edu.nouri.photoReX.Picture.PictureInfo;
+import edu.nouri.photoReX.picture.PictureInfo;
 
 //import edu.nouri.photoReX.recommender.Recommender; 
 
