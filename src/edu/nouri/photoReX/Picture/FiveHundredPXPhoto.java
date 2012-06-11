@@ -19,6 +19,9 @@ public int voteCount;
 public int favoriteCount; 
 public int commentCount; 
 
+public String userFullName; 
+public String userid; 
+
 public FiveHundredPXPhoto(JSONObject json)
 {
 	try{
@@ -36,6 +39,13 @@ public FiveHundredPXPhoto(JSONObject json)
 		voteCount = json.getInt("votes_count"); 
 		favoriteCount = json.getInt("favorites_count"); 
 		commentCount = json.getInt("comments_count"); 
+		
+		//things about the author
+		JSONObject user = json.getJSONObject("user"); 
+		userFullName = user.getString("fullname"); 
+		userid = user.getString("id"); 
+		
+		
 	}
 	catch(Exception e)
 	{
