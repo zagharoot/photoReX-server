@@ -2,15 +2,14 @@ package edu.nouri.photoReX.picture;
 
 import us.monoid.json.JSONObject;
 
-public class FiveHundredPXPhoto {
+/*
+ * This is a more complete class representing the pictures from 500px. the info here is mostly used by the learners (not sent to client)
+ */
+public class FiveHundredPXPhoto extends FiveHundredPXPictureInfo {
 
 	
-public String id;
-public String url; 
 public String name; 
-public String description; 
 
-public int timesViewed; 
 public double rating; 
 public int category; 			//the meaning of this can be found at 500px.com 
 public int width;  				//donno if this is usefull at all
@@ -19,47 +18,85 @@ public int voteCount;
 public int favoriteCount; 
 public int commentCount; 
 
-public String userFullName; 
-public String userid; 
-
-public FiveHundredPXPhoto(JSONObject json)
+// creates an object using the json sent by the 500px website. 
+public static FiveHundredPXPhoto photoFromWebsiteJson(JSONObject json)
 {
+	FiveHundredPXPhoto result = new FiveHundredPXPhoto(); 
 	try{
-		id = json.getString("id"); 
-		url = json.getString("image_url"); 
-		url = url.substring(0,  url.lastIndexOf("/")+1);
-		name = json.getString("name"); 
-		description = json.getString("description"); 
+		result.id = json.getString("id"); 
+		result.url = json.getString("image_url"); 
+		result.url = result.url.substring(0,  result.url.lastIndexOf("/")+1);
+
+		result.hash = result.toHash(); 	// hash only uses id and url 
+
+		result.name = json.getString("name"); 
+		result.description = json.getString("description"); 
 		
-		timesViewed = json.getInt("times_viewed"); 
-		rating = json.getDouble("rating"); 
-		category = json.getInt("category"); 
-		width =  json.getInt("width"); 
-		height = json.getInt("height"); 
-		voteCount = json.getInt("votes_count"); 
-		favoriteCount = json.getInt("favorites_count"); 
-		commentCount = json.getInt("comments_count"); 
+		result.timesViewed = json.getInt("times_viewed"); 
+		result.rating = json.getDouble("rating"); 
+		result.category = json.getInt("category"); 
+		result.width =  json.getInt("width"); 
+		result.height = json.getInt("height"); 
+		result.voteCount = json.getInt("votes_count"); 
+		result.favoriteCount = json.getInt("favorites_count"); 
+		result.commentCount = json.getInt("comments_count"); 
 		
 		//things about the author
 		JSONObject user = json.getJSONObject("user"); 
-		userFullName = user.getString("fullname"); 
-		userid = user.getString("id"); 
-		
-		
+		result.userFullName = user.getString("fullname"); 
+		result.userid = user.getString("id"); 
 	}
 	catch(Exception e)
 	{
-		
+		return null; 
 	}
+	
+	return result; 
 	
 }
 
-public FiveHundredPXPictureInfo pictureInfo()
+//creates an object using the json in the redis 
+public static FiveHundredPXPhoto photoFromJson(JSONObject json)
 {
-	FiveHundredPXPictureInfo result = new FiveHundredPXPictureInfo(this); 
+	FiveHundredPXPhoto result = new FiveHundredPXPhoto(); 
+	try{
+		
+		result.id = json.getString("id"); 
+		result.url = json.getString("url"); 
+		result.hash = json.getString("hash"); 
+
+		result.name = json.getString("name"); 
+		result.description = json.getString("description"); 
+		
+		result.timesViewed = json.getInt("timesViewed"); 
+		result.rating = json.getDouble("rating"); 
+		result.category = json.getInt("category"); 
+		result.width =  json.getInt("width"); 
+		result.height = json.getInt("height"); 
+		result.voteCount = json.getInt("voteCount"); 
+		result.favoriteCount = json.getInt("favoriteCount"); 
+		result.commentCount = json.getInt("commentCount"); 
+		
+		result.userFullName = json.getString("userFullName"); 
+		result.userid = json.getString("userid"); 
+	}
+	catch(Exception e)
+	{
+		return null; 
+	}
 	
 	return result; 
+	
 }
+
+
+
+
+public FiveHundredPXPictureInfo pictureInfo()
+{
+	return new FiveHundredPXPictureInfo(this); 
+}
+
 
 public void fill(FiveHundredPXPhoto rhs)
 {

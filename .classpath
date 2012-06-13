@@ -9,6 +9,6 @@
 			<attribute name="javadoc_location" value="jar:file:/Users/alianouri/research/codes/photoReX/photoReX-server/lib/gson-2.1-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/resty-0.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/resty-0.3.1.jar" sourcepath="/Users/alianouri/research/codes/photoReX/photoReX-server/lib/resty-0.3.1-source.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

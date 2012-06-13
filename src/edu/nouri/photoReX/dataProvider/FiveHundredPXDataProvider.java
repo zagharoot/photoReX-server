@@ -35,7 +35,7 @@ public FiveHundredPXPhoto getPicture(String id)
 		e.printStackTrace();
 	} 
 	
-	FiveHundredPXPhoto result = new FiveHundredPXPhoto(obj); 
+	FiveHundredPXPhoto result = FiveHundredPXPhoto.photoFromWebsiteJson(obj); 
 	
 	return result; 
 }
@@ -75,7 +75,7 @@ public FiveHundredPXPhotoCollection getPictures(String feature, int resultPerPag
 	{
 		try{
 			JSONObject po = obj.getJSONObject(i); 
-			FiveHundredPXPhoto p = new FiveHundredPXPhoto(po); 
+			FiveHundredPXPhoto p = FiveHundredPXPhoto.photoFromWebsiteJson(po); 
 			result.pics.add(p); 
 		}
 		catch(Exception e)
