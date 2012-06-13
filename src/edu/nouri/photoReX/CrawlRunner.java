@@ -45,7 +45,7 @@ public class CrawlRunner {
 				crawler = (Crawler) theClass.newInstance(); 
 				
 			//crawler is now ready
-			System.out.print("Crawler " + crawler.redisSetName + "  constructed. Fetching... "); 
+			System.out.print(crawler.redisSetName + "  constructed. Fetching... "); 
 			int rcode = crawler.fetch();
 			long end = System.currentTimeMillis(); 
 			if (rcode==0)

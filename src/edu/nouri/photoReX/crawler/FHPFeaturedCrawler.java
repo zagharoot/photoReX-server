@@ -15,7 +15,7 @@ public class FHPFeaturedCrawler extends Crawler {
 	public FHPFeaturedCrawler(String f)
 	{
 		feature = f ; 
-		redisSetName = "FHPFeatured:" + f; 
+		redisSetName = "crawler:FHPFeatured:" + f; 
 	}
 	
 	@Override

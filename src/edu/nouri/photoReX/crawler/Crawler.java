@@ -16,7 +16,11 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
 public abstract class Crawler {
 
 	protected Jedis redis; 
-	public String redisSetName; 	//this is the name of the set in redis that will contain the picture set (each crawler has its own)
+	
+	
+	//this is the name of the set in redis that will contain the picture set (each crawler has its own). use crawler:[] pattern
+	public String redisSetName; 	
+	
 	
 	public Crawler()
 	{
