@@ -1,2 +1,6 @@
 bin/
 compile-crawler.sh~
+
+dump.rdb
+
+src/redis/clients/.DS_Store
