@@ -39,7 +39,7 @@ public class Learner implements RecommenderDelegate, Runnable{
 		FlickrRandomRecommender frr = new FlickrRandomRecommender(this); 
 		recommenders.add(frr); 
 
-		FHPFeaturedRecommender fhr = new FHPFeaturedRecommender("editor",this); 
+		FHPFeaturedRecommender fhr = new FHPFeaturedRecommender("editors",this); 
 		recommenders.add(fhr); 
 		
 		outstandingJobs = new HashMap<RecommendationTask,LearnerThread> (); 
