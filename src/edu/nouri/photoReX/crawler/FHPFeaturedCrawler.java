@@ -8,7 +8,7 @@ import edu.nouri.photoReX.picture.PictureInfo;
 
 public class FHPFeaturedCrawler extends Crawler {
 
-	private final int howMany = 100; //How many pictures to fetch each time we are called 
+	private final int howMany = 500; //How many pictures to fetch each time we are called 
 	private String feature; //what feature we use to fetch data (editors choice, most viewed... look at 500px api for more info)
 	
 

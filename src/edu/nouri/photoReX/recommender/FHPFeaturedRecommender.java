@@ -114,7 +114,10 @@ public String feature; 	//look at 500px website for possible feature values
 				
 				RecommendationInfo rec = new RecommendationInfo(); 
 				JSONObject jsonObj = new JSONObject(jjson); 
-				rec.picture = new FiveHundredPXPictureInfo(FiveHundredPXPhoto.photoFromJson(jsonObj)); 
+				FiveHundredPXPhoto photo = FiveHundredPXPhoto.photoFromJson(jsonObj); 
+				if (photo == null)
+					continue; 
+				rec.picture = new FiveHundredPXPictureInfo(photo); 
 				rec.score = 0.6; 
 				result.add(rec); 
 			}

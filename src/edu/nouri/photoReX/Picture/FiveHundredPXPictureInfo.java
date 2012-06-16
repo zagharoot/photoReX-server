@@ -30,6 +30,9 @@ public class FiveHundredPXPictureInfo extends PictureInfo {
 	{
 		this(); 
 		
+		if (p == null)
+			return; 
+		
 		id = p.id; 
 		url = p.url;
 		
