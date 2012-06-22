@@ -6,6 +6,7 @@ import edu.nouri.photoReX.picture.PictureInfo;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Pipeline;
 import redis.clients.jedis.exceptions.JedisConnectionException;
+import redis.clients.jedis.exceptions.JedisDataException;
 
 
 /*
@@ -53,6 +54,10 @@ public abstract class Crawler {
 		}catch(JedisConnectionException jce)
 		{
 			return -2; //redis error 
+		}
+		catch(JedisDataException jde)
+		{
+			jde.printStackTrace(); 
 		}
 
 		return 0; //success

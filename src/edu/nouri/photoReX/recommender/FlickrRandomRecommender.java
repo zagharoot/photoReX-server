@@ -1,19 +1,19 @@
 package edu.nouri.photoReX.recommender;
 
-import java.io.IOException;
 import java.util.*;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Iterator;
 
-import org.json.JSONException;
+
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Pipeline;
+import redis.clients.jedis.Response;
+import redis.clients.jedis.exceptions.JedisConnectionException;
 
 import com.gmail.yuyang226.flickr.*;
-import com.gmail.yuyang226.flickr.photos.*;
 
 import com.gmail.yuyang226.flickr.interestingness.*;
 
 import edu.nouri.photoReX.*; 
+import edu.nouri.photoReX.picture.FlickrPhoto;
 import edu.nouri.photoReX.picture.FlickrPictureInfo;
 
 
@@ -31,7 +31,7 @@ public class FlickrRandomRecommender extends Recommender {
 		this.interestingInterface = flickr.getInterestingnessInterface(); 
 	}
 	
-	
+/* this is the old model where we directly contact flickr to get results back 	
 	public void execute(String username, int howMany, RecommendationTask task)
 	{
 
@@ -80,4 +80,95 @@ public class FlickrRandomRecommender extends Recommender {
 				delegate.recommendationDidComplete(this, task, null);
 			} 
 	}
+*/
+	
+	//this is the new model that uses the results from crawler to construct recomm
+	public void execute(String username, int howMany, RecommendationTask task) 
+	{
+		Jedis redis = new Jedis("localhost"); 
+		ArrayList<RecommendationInfo> result = new ArrayList<RecommendationInfo>(); 
+
+		try{
+			//the set that contains pics for the user
+			String userSet = "user:" + username + ":flickrFeatured:tmp"; 
+			
+			//the set visited by user
+			String userVisitedSet = "user:" + username + ":visited"; 
+			
+			//the set from the crawler 
+			String crawlerSet = "crawler:flickrFeatured"; 
+			
+			//first see if we already have a set big enough: 
+			long currentSetSize = redis.scard(userSet); 
+			
+			
+			if (currentSetSize < howMany)  //need to add to it 
+			{
+				Pipeline p = redis.pipelined(); 
+				p.sdiffstore(userSet,  crawlerSet, userVisitedSet); 
+				Response<Long> newSize =  p.scard(userSet); 
+				p.sync(); 
+				
+				Long size = newSize.get(); 
+				if (size==null || size==0)		//we have to decide whether to return null if size < howMany
+				{
+					delegate.recommendationDidComplete(this, task, null); 
+					return; 
+				}
+				
+				currentSetSize = size.longValue(); 
+			}
+			
+			//will contain the set of picture hashes as the result
+			ArrayList<Response<String> > hashResults = new ArrayList<Response<String> >(); 
+			
+			Pipeline p = redis.pipelined(); 
+			for(int i=0; i< howMany; i++)
+			{
+				Response<String> res = p.spop(userSet); 
+				hashResults.add(res); 
+			}
+			p.sync(); 
+			
+			
+			//ok, now we need to actually retrieve the json for the images 
+			
+			ArrayList<Response<String> > imageResults = new ArrayList<Response<String> >(); 
+			p = redis.pipelined(); 
+			for(Response<String> hash : hashResults)
+			{
+				
+				String picKey = "pic:" + hash.get(); 
+				Response<String> res = p.get(picKey); 
+				imageResults.add(res); 
+			}
+			p.sync(); 
+			
+			
+			//now imageResults contains all the jsons for the result set 
+			for(Response<String> picJson : imageResults)
+			{
+				String jjson = picJson.get(); 
+				if (jjson==null) continue; 
+				
+				RecommendationInfo rec = new RecommendationInfo(); 
+				FlickrPhoto photo = FlickrPhoto.photoFromJson(jjson); 
+				if (photo == null)
+					continue; 
+				rec.picture = new FlickrPictureInfo(photo); 
+				rec.score = 0.6; 
+				result.add(rec); 
+			}
+				
+			//voila, result has the results :) 
+			delegate.recommendationDidComplete(this, task, result); 
+
+		
+		}catch(JedisConnectionException jce)
+		{
+			delegate.recommendationDidComplete(this, task, null); 
+			return; 
+		}
+	}
+	
 }

@@ -6,16 +6,29 @@ import com.gmail.yuyang226.flickr.photos.Photo;
 
 public class FlickrPictureInfo extends PictureInfo {
 
-private String id; 
-private String server; 
-private String farm; 
-private String secret; 
+public String id; 
+public String server; 
+public String farm; 
+public String secret; 
 	
 	public FlickrPictureInfo()
 	{
 		super("flickr");
 	}
 
+	public FlickrPictureInfo(FlickrPhoto p)
+	{
+		this(); 
+		
+		id = p.id; 
+		server = p.server; 
+		farm = p.farm; 
+		secret = p.secret; 
+		hash = p.hash; 
+		
+	}
+	
+	
 	public FlickrPictureInfo(String _id, String _server, String _farm, String _secret ) 
 	{
 		this(); 
