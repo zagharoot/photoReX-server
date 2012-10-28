@@ -1,6 +1,6 @@
 bin/
-compile-crawler.sh~
-
+*~
+*.*~
+.DS_Store
 dump.rdb
 
-src/redis/clients/.DS_Store
