@@ -16,6 +16,15 @@ public class Server implements LearnerDelegate {
 	private JedisPool redisPool; 						//this is the redis client that receives recommendation publishes
 	private Learner learner; 
 	
+	//website:
+	@SuppressWarnings("serial")
+	private static final ArrayList<String> allProviders = new ArrayList<String>() {{
+	    add("flickrAccount");
+	    add("fiveHundredPXAccount");
+	}}; 
+	
+	
+	
 	public static void main(String[] args) {
 		
 		Server server = new Server(); 
@@ -63,7 +72,7 @@ public class Server implements LearnerDelegate {
 	
 			try{
 				RecommendationTask task = new RecommendationTask( redis.blpop(0, "users:recommend:queue")); 
-				System.out.print("recommendingg " + task.pageCount + " pics for '" + task.username + "' ... "); 
+				System.out.print("recommending " + task.pageCount + " pics for '" + task.username + "' ... "); 
 				long start = System.currentTimeMillis();
 				ArrayList<RecommendationPage> recs = learner.recommend(task); 
 				
@@ -134,15 +143,32 @@ public class Server implements LearnerDelegate {
 	{
 		Jedis redis = redisPool.getResource(); 
 		RecommendationTask result =  getNextRecommendationTask(sleepTime, redis); 
+		this.augmentEnabledServicesToRecommendationTask(result, redis); 
 		redisPool.returnResource(redis); 
 		return result; 
 
 	}
 	
+	//blockingly retrieves the providers that the user has enabled, and adds this info to the recommendationTask
+	protected void augmentEnabledServicesToRecommendationTask(RecommendationTask task, Jedis redis)
+	{
+		try{
+			//get the enabled services from redis and add them to the recommendation task
+			String key = "user:" + task.username + ":services"; 
+			List<String> providers = redis.lrange(key, 0, -1);			//get all the elements
+			task.providers = (ArrayList<String>) providers; 
+		}
+		catch(Exception e)
+		{
+			//if unsuccessful, add all the providers 
+			task.providers = Server.allProviders; 
+		}
+	}
+	
 	
 	
 	//blockingly retrieves the next task from redis 
-	public RecommendationTask getNextRecommendationTask(long sleepTime, Jedis redis)
+	protected RecommendationTask getNextRecommendationTask(long sleepTime, Jedis redis)
 	{
 		try{
 			RecommendationTask task = new RecommendationTask( redis.blpop(0, "users:recommend:queue")); 

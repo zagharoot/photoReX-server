@@ -17,8 +17,8 @@ public class FHPFeaturedRecommender extends Recommender {
 
 public String feature; 	//look at 500px website for possible feature values 	
 	
-	@Override    //this is the old model. retrieve the data directly from 500px website. 
-/*	public void execute(String username, int howMany, RecommendationTask task) 
+/*	@Override    //this is the old model. retrieve the data directly from 500px website. 
+	public void execute(String username, int howMany, RecommendationTask task) 
 	{
 		FiveHundredPXDataProvider dp = new FiveHundredPXDataProvider();
 		ArrayList<RecommendationInfo> result = new ArrayList<RecommendationInfo>(); 
@@ -44,6 +44,13 @@ public String feature; 	//look at 500px website for possible feature values
 	}
 */
 	
+	@Override
+	public String name()
+	{
+		return "FHPFeaturedRecommender:" + feature; 
+	}
+
+
 	public void execute(String username, int howMany, RecommendationTask task) 
 	{
 		Jedis redis = new Jedis("localhost"); 
@@ -148,6 +155,19 @@ public String feature; 	//look at 500px website for possible feature values
 	}
 	
 	
+
+	@Override
+	public boolean handlesProvider(ArrayList<String> providerList)
+	{
+		//we only handle 500px here 
+		for(String p : providerList)
+		{
+			if (p.compareTo("fiveHundredPXAccount") == 0 )
+				return true; 
+		}
+		
+		return false; 
+	}
 	
 	
 	

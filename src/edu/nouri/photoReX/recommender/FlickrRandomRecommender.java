@@ -31,6 +31,13 @@ public class FlickrRandomRecommender extends Recommender {
 		this.interestingInterface = flickr.getInterestingnessInterface(); 
 	}
 	
+	
+	@Override 
+	public String name()
+	{
+		return "FlickrRandomRecommender"; 
+	}
+	
 /* this is the old model where we directly contact flickr to get results back 	
 	public void execute(String username, int howMany, RecommendationTask task)
 	{
@@ -50,7 +57,7 @@ public class FlickrRandomRecommender extends Recommender {
 					RecommendationInfo rinfo = new RecommendationInfo(); 
 					rinfo.picture = pinfo ; 
 					rinfo.username = username; 
-					rinfo.score = 0.5; 			//default :) 
+					rinfo.score = 0.3; 			//default :) 
 				//	rinfo.recommender = this; 
 					
 					result.add(rinfo); 
@@ -170,5 +177,20 @@ public class FlickrRandomRecommender extends Recommender {
 			return; 
 		}
 	}
+
+	
+	@Override
+	public boolean handlesProvider(ArrayList<String> providerList)
+	{
+		//we only handle flickr here 
+		for(String p : providerList)
+		{
+			if (p.compareTo("flickrAccount") == 0 )
+				return true; 
+		}
+		
+		return false; 
+	}
+	
 	
 }

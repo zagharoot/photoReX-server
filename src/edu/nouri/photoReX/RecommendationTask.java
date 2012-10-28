@@ -15,6 +15,8 @@ import edu.nouri.photoReX.recommender.Recommender;
 public class RecommendationTask {
 	
 	public String username; 
+	public ArrayList<String> providers; 	//list of websites we should collect data from 
+	
 	public int pageCount;				//number of pages to populate 
 	
 	public long startTime; 				//marks when the task was initialized in the system 

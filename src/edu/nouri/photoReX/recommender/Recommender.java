@@ -18,10 +18,18 @@ public abstract class Recommender implements Runnable  {
 	protected String prerunUsername; 
 	protected int	prerunHowMany; 
 	
+
+	
 	public Recommender(RecommenderDelegate del){
 		delegate = del; 
 		
 		outstandingJobs = new HashMap<RecommendationTask, Thread>(); 
+	}
+	
+	//given a list of providers, is there any provider that this recommender can handle
+	public boolean handlesProvider(ArrayList<String> providerList)
+	{
+		return false; 
 	}
 	
 	
@@ -36,6 +44,11 @@ public abstract class Recommender implements Runnable  {
 		
 	}
 	
+	//name of the current recommender
+	public String name()
+	{
+		return ""; 
+	}
 	
 	/*
 	 * Given a username and number of required recommendations, return a set of recommendations. This method 
@@ -70,6 +83,8 @@ public abstract class Recommender implements Runnable  {
 		
 		outstandingJobs.remove(task); 
 	}
+	
+	
 	
 	
 }

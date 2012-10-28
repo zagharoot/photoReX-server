@@ -42,6 +42,9 @@ public class Learner implements RecommenderDelegate, Runnable{
 		FHPFeaturedRecommender fhr = new FHPFeaturedRecommender("editors",this); 
 		recommenders.add(fhr); 
 		
+		FHPFeaturedRecommender fhrr = new FHPFeaturedRecommender("popular", this); 
+		recommenders.add(fhrr); 
+
 		outstandingJobs = new HashMap<RecommendationTask,LearnerThread> (); 
 	}
 	
@@ -106,6 +109,12 @@ public class Learner implements RecommenderDelegate, Runnable{
 	
 	public void recommendationDidComplete(Recommender recommender, RecommendationTask task, ArrayList<RecommendationInfo> recomm)
 	{
+		if (recomm == null)
+			return; 
+
+		
+//		System.out.println("recommender " + recommender.name() + " finished"); 
+
 		int perPage = recomm.size() /  task.pageCount ; 
 		int k=0; 
 	
@@ -134,16 +143,25 @@ public class Learner implements RecommenderDelegate, Runnable{
 	public void run() 
 	{
 		RecommendationTask task = prerunTask; 
-		int totalPics = EXPERT_TO_RECOMMEND_RATIO* PICTURES_PER_PAGE * task.pageCount; 
-		int perLearner =  (int) java.lang.Math.ceil(totalPics/(double)recommenders.size()); 
-		
-		for(int i=0; i< recommenders.size(); i++)
+
+		//first decide how many of our recommenders can work on this task based on the desired providers
+		ArrayList<Recommender> goodProviders = new ArrayList<Recommender>(); 
+		for(Recommender r: recommenders)
 		{
-			Recommender r = recommenders.get(i); 
+			if (r.handlesProvider(task.providers))
+				goodProviders.add(r); 
+		}
+		
+		int totalPics = EXPERT_TO_RECOMMEND_RATIO* PICTURES_PER_PAGE * task.pageCount; 
+		int perLearner =  (int) java.lang.Math.ceil(totalPics/(double)goodProviders.size()); 
+		
+		for (Recommender r: goodProviders)
+		{
+//			System.out.println("recommender " + r.name() + " is starting"); 
 			task.outstandingRecommenders.add(r); 		//add this recommender to the outstanding list
 			r.recommend(task.username, perLearner, task); 
 		}
-		
+	
 		//we should now wait till all the recommenders have finished. 
 		LearnerThread t = outstandingJobs.get(task); 
 		t.await(); 
