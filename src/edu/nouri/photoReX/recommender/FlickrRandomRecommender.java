@@ -22,6 +22,9 @@ public class FlickrRandomRecommender extends Recommender {
 	private Flickr flickr; 
 	InterestingnessInterface interestingInterface; 
 	
+
+	
+
 	
 	public FlickrRandomRecommender(RecommenderDelegate del)
 	{
@@ -163,7 +166,7 @@ public class FlickrRandomRecommender extends Recommender {
 				if (photo == null)
 					continue; 
 				rec.picture = new FlickrPictureInfo(photo); 
-				rec.score = 0.6; 
+				rec.score = 0.5; 
 				result.add(rec); 
 			}
 				

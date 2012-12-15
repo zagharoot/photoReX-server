@@ -130,8 +130,6 @@ public class Learner implements RecommenderDelegate, Runnable{
 		LearnerThread t = outstandingJobs.get(task); 
 		t.latch.countDown(); 
 //		outstandingJobs.remove(task); 
-		
-		
 	}
 
 
@@ -168,15 +166,27 @@ public class Learner implements RecommenderDelegate, Runnable{
 		
 
 		//-----------we have all the recommendations from recommenders
-		
-		//randomly select a subset for each page
-		//distribute these picture among all the pages 
-		for (int i=0; i< task.recomms.size();i++)
+
+		for (int i=0; i< task.recomms.size();i++)		//for each recomm page 
+		{
+
+/*			//randomly select a subset for each page
+			//distribute these picture among all the pages 
 			while(task.recomms.get(i).pics.size() > PICTURES_PER_PAGE)
 			{
 				int pos = (int)(Math.random()*task.recomms.get(i).pics.size()-1);
 				task.recomms.get(i).pics.remove(pos); 
+				
 			}
+*/
+			
+			Collections.sort(task.recomms.get(i).pics); 
+//			ArrayList<RecommendationInfo> gholi = task.recomms.get(i).pics; 
+			while(task.recomms.get(i).pics.size() > PICTURES_PER_PAGE)
+			{
+				task.recomms.get(i).pics.remove(0); 
+			}
+		}
 		
 		
 		//we are all done, notify our own delegate 

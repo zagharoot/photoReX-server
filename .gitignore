@@ -1,6 +1,11 @@
 bin/
 *~
+<<<<<<< HEAD
 *.*~
 .DS_Store
 dump.rdb
 
+=======
+.DS_Store 
+dump.rdb
+>>>>>>> first step toward a more intelligent learner. we now return images with highest scores instead of random
