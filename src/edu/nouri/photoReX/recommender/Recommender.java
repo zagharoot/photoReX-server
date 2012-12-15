@@ -63,7 +63,8 @@ public abstract class Recommender implements Runnable  {
 		prerunTask = task; 
 		
 		Thread t = new Thread(this); 
-		t.setName(this.getClass().getSimpleName()); 
+//		t.setName(this.getClass().getSimpleName()); 
+		t.setName(this.name()); 
 		
 		outstandingJobs.put(task,  t); 
 		t.start(); 

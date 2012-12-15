@@ -60,7 +60,8 @@ public class Server implements LearnerDelegate {
 				{}
 			}
 			RecommendationTask task = getNextRecommendationTask(); 
-			learner.recommend(task);	//this is nonblocking
+			if (task != null)
+				learner.recommend(task);	//this is nonblocking
 		}
 		
 /*		
@@ -182,9 +183,12 @@ public class Server implements LearnerDelegate {
 				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 				Date date = new Date();
 				redis.disconnect(); 
+				if (sleepTime ==5000)
+					return null; 		
+				
 				System.out.println(dateFormat.format(date) + ": redis was closed. trying to reconnect in " + (int)(sleepTime/1000) + " seconds..."); 
 				Thread.sleep(sleepTime);
-				sleepTime = (long) Math.min(60000, sleepTime*1.5); 
+				sleepTime = (long) Math.min(5000, sleepTime*1.5); 
 				redis.connect(); 
 				return getNextRecommendationTask(sleepTime, redis); 
 			}
