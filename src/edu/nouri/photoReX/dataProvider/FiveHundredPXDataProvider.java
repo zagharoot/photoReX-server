@@ -23,7 +23,6 @@ public FiveHundredPXPhoto getPicture(String id)
 	try {
 		js = r.json(url);
 	} catch (IOException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	} 
 
@@ -31,7 +30,6 @@ public FiveHundredPXPhoto getPicture(String id)
 	try {
 		obj = (JSONObject) js.get("photo");
 	} catch (Exception e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	} 
 	
@@ -58,7 +56,6 @@ public FiveHundredPXPhotoCollection getPictures(String feature, int resultPerPag
 	try {
 		js = r.json(url);
 	} catch (IOException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	} 
 
@@ -66,7 +63,6 @@ public FiveHundredPXPhotoCollection getPictures(String feature, int resultPerPag
 	try {
 		obj = (JSONArray) js.get("photos");
 	} catch (Exception e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	} 
 	

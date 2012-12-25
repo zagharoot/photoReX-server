@@ -69,23 +69,18 @@ public class FlickrRandomRecommender extends Recommender {
 				delegate.recommendationDidComplete(this, task, result); 
 				
 			} catch (InvalidKeyException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				delegate.recommendationDidComplete(this, task, null); 
 			} catch (NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				delegate.recommendationDidComplete(this, task, null); 
 			} catch (FlickrException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				delegate.recommendationDidComplete(this, task, null); 
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				delegate.recommendationDidComplete(this, task, null); 
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				delegate.recommendationDidComplete(this, task, null);
 			} 

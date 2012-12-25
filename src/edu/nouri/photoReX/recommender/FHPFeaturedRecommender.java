@@ -13,6 +13,7 @@ import edu.nouri.photoReX.picture.*;
 import edu.nouri.photoReX.RecommendationInfo;
 import edu.nouri.photoReX.RecommendationTask;
 
+//remember that there's only one object from this class, but execute will be called in parallel so it needs to be thread-safe
 public class FHPFeaturedRecommender extends Recommender {
 
 public String feature; 	//look at 500px website for possible feature values 	
@@ -50,7 +51,7 @@ public String feature; 	//look at 500px website for possible feature values
 		return "FHPFeaturedRecommender:" + feature; 
 	}
 
-
+	//remember that this function might be called in parallel multiple times from multiple threads 
 	public void execute(String username, int howMany, RecommendationTask task) 
 	{
 		Jedis redis = new Jedis("localhost"); 
@@ -138,7 +139,6 @@ public String feature; 	//look at 500px website for possible feature values
 			delegate.recommendationDidComplete(this, task, null); 
 			return; 
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 //			e.printStackTrace();
 			delegate.recommendationDidComplete(this, task, null); 
 			return; 
