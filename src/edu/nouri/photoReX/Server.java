@@ -172,6 +172,7 @@ public class Server implements LearnerDelegate {
 	protected RecommendationTask getNextRecommendationTask(long sleepTime, Jedis redis)
 	{
 		try{
+//			System.out.println("blockingly reading sth from rec queue"); 
 			RecommendationTask task = new RecommendationTask( redis.blpop(0, "users:recommend:queue")); 
 			System.out.print("recommendingg " + task.pageCount + " pics for '" + task.username + "' ... "); 
 			return task; 
@@ -183,7 +184,7 @@ public class Server implements LearnerDelegate {
 				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 				Date date = new Date();
 				redis.disconnect(); 
-				if (sleepTime ==5000)
+				if (sleepTime ==3000)
 					return null; 		
 				
 				System.out.println(dateFormat.format(date) + ": redis was closed. trying to reconnect in " + (int)(sleepTime/1000) + " seconds..."); 
