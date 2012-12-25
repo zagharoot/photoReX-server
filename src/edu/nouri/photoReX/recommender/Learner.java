@@ -73,6 +73,8 @@ public class Learner implements RecommenderDelegate{
 		
 	}
 	
+	
+	//make sure this function remains thread-safe!!!
 	public void recommendationDidComplete(Recommender recommender, RecommendationTask task, ArrayList<RecommendationInfo> recomm)
 	{
 		if (recomm == null)
@@ -84,19 +86,22 @@ public class Learner implements RecommenderDelegate{
 		int perPage = recomm.size() /  task.pageCount ; 
 		int k=0; 
 	
-		//distribute these picture among all the pages 
-		for (int i=0; i< task.recomms.size();i++)
-			for(int j=0; j< perPage; j++,k++)
-				task.recomms.get(i).pics.add(recomm.get(k)); 
-
+		synchronized(task.recomms)
+		{
+			//distribute these picture among all the pages 
+			for (int i=0; i< task.recomms.size();i++)
+				for(int j=0; j< perPage; j++,k++)
+					task.recomms.get(i).pics.add(recomm.get(k)); 
+		}
+		
+		
 		//remove recommender from outstanding list 
-		task.outstandingRecommenders.remove(recommender); 
-	
+		synchronized(task.outstandingRecommenders){
+			task.outstandingRecommenders.remove(recommender); 
+		}
+		
 		//update the latch for this task 
-		LearnerThread t = outstandingJobs.get(task); 
-		if (t == null) 
-			System.out.println("learnerthread is null"); 
-				
+		LearnerThread t = outstandingJobs.get(task); 				
 		t.latch.countDown(); 
 //		outstandingJobs.remove(task); 
 	}
