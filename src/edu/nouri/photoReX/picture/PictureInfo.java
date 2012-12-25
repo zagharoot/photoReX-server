@@ -20,6 +20,12 @@ public abstract class PictureInfo {
 	public boolean isViewed = false; 
 	public boolean isVisited = false; 
 	
+	//this is to make the calls to digest thread safe otherwise it crashes. Another way to solve this (with actually better performance) is to have a pool of messagedigest object and checkout/use/return them 
+	public static synchronized byte[] digest (byte[] arg)
+	{
+		return sha1.digest(arg); 
+	}
+	
 	PictureInfo(String w)
 	{
 		if (sha1==null)
@@ -47,7 +53,7 @@ public abstract class PictureInfo {
 	{
 		try {
 			String encode = this.toString(); 
-			byte[] digest = sha1.digest(encode.getBytes("UTF-8"));
+			byte[] digest = digest(encode.getBytes("UTF-8"));
 			
 			StringBuffer result = new StringBuffer(); 
 			for(int i=0; i< digest.length; i++)
